@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14C81f" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Zl3-eB-vRz">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
+    </dependencies>
+    <scenes>
+        <!--Navigation Controller-->
+        <scene sceneID="QcN-FM-wlA">
+            <objects>
+                <navigationController id="Zl3-eB-vRz" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="XoE-pP-fTe">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="ht0-dD-BhT" kind="relationship" relationship="rootViewController" id="7c5-cT-mhR"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="5h9-hx-Ka8" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="352" y="403"/>
+        </scene>
+        <!--Current Plants-->
+        <scene sceneID="w7o-hL-hGy">
+            <objects>
+                <viewController id="ht0-dD-BhT" customClass="PMNPlantListViewController" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="9Rg-IT-5aj">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <connections>
+                            <outlet property="dataSource" destination="ht0-dD-BhT" id="pgW-Bt-TWv"/>
+                            <outlet property="delegate" destination="ht0-dD-BhT" id="XTX-6E-7EH"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Current Plants" id="X2p-9O-vJZ">
+                        <barButtonItem key="rightBarButtonItem" title="Add" style="done" id="Img-2V-8Xq">
+                            <connections>
+                                <segue destination="ALw-cW-Mzq" kind="presentation" modalPresentationStyle="formSheet" id="gY3-pG-Cb0"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="tableView" destination="9Rg-IT-5aj" id="uBb-Cc-pSZ"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="wP3-a0-UvU" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1092" y="399"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="6M9-ga-gJW">
+            <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="OC6-LB-jJV" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <navigationController id="ALw-cW-Mzq" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="OoB-OQ-uAC">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="AQV-bV-acd" kind="relationship" relationship="rootViewController" id="FJt-gG-3Sb"/>
+                    </connections>
+                </navigationController>
+            </objects>
+            <point key="canvasLocation" x="1796" y="435"/>
+        </scene>
+        <!--Add Plant-->
+        <scene sceneID="3sF-Q3-9i0">
+            <objects>
+                <viewController title="Add Plant" id="AQV-bV-acd" customClass="PMNPlantSeletionViewController" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="f7D-RL-U9W">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <connections>
+                            <outlet property="dataSource" destination="AQV-bV-acd" id="50W-E1-nZ8"/>
+                            <outlet property="delegate" destination="AQV-bV-acd" id="Hpa-PV-APg"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" id="ddS-3b-hFk">
+                        <barButtonItem key="leftBarButtonItem" title="Scan" id="Ko7-6b-ISC">
+                            <connections>
+                                <action selector="toggleScanning:" destination="AQV-bV-acd" id="g7V-8e-dNS"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" title="Done" id="Gy0-mq-xaC">
+                            <connections>
+                                <action selector="done:" destination="AQV-bV-acd" id="2rN-8y-rph"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="doneButton" destination="Gy0-mq-xaC" id="Rek-c9-Ow3"/>
+                        <outlet property="scanButton" destination="Ko7-6b-ISC" id="v35-bh-VLE"/>
+                        <outlet property="tableView" destination="f7D-RL-U9W" id="UGw-Dq-eeM"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ibl-G9-tnq" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2472" y="475"/>
+        </scene>
+    </scenes>
+</document>

@@ -1,0 +1,500 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		B38E291E1A5CCEEC008573A4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B38E291D1A5CCEEC008573A4 /* main.m */; };
+		B38E29211A5CCEEC008573A4 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B38E29201A5CCEEC008573A4 /* AppDelegate.m */; };
+		B38E29241A5CCEEC008573A4 /* PMNPlantListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B38E29231A5CCEEC008573A4 /* PMNPlantListViewController.m */; };
+		B38E29271A5CCEEC008573A4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B38E29251A5CCEEC008573A4 /* Main.storyboard */; };
+		B38E29291A5CCEEC008573A4 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B38E29281A5CCEEC008573A4 /* Images.xcassets */; };
+		B38E292C1A5CCEEC008573A4 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = B38E292A1A5CCEEC008573A4 /* LaunchScreen.xib */; };
+		B38E29381A5CCEEC008573A4 /* PlantMoistureNotifierTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B38E29371A5CCEEC008573A4 /* PlantMoistureNotifierTests.m */; };
+		B38E29431A5CD13F008573A4 /* PMNPlantSeletionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B38E29421A5CD13F008573A4 /* PMNPlantSeletionViewController.m */; };
+		B3EE8DCB1A5DAB9600E7D27C /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3EE8DCA1A5DAB9600E7D27C /* CoreLocation.framework */; };
+		C09FDD6949996A517E3F97CA /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C8C50BC4B18D08C5C5F64E46 /* libPods.a */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		B38E29321A5CCEEC008573A4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B38E29101A5CCEEC008573A4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B38E29171A5CCEEC008573A4;
+			remoteInfo = PlantMoistureNotifier;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		6FFD34F514DDD4D0B3395CC8 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		98232FE0F53FA21A228129C6 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		B38E29181A5CCEEC008573A4 /* PlantMoistureNotifier.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PlantMoistureNotifier.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B38E291C1A5CCEEC008573A4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B38E291D1A5CCEEC008573A4 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		B38E291F1A5CCEEC008573A4 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		B38E29201A5CCEEC008573A4 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		B38E29221A5CCEEC008573A4 /* PMNPlantListViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PMNPlantListViewController.h; sourceTree = "<group>"; };
+		B38E29231A5CCEEC008573A4 /* PMNPlantListViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PMNPlantListViewController.m; sourceTree = "<group>"; };
+		B38E29261A5CCEEC008573A4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		B38E29281A5CCEEC008573A4 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		B38E292B1A5CCEEC008573A4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
+		B38E29311A5CCEEC008573A4 /* PlantMoistureNotifierTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PlantMoistureNotifierTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		B38E29361A5CCEEC008573A4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B38E29371A5CCEEC008573A4 /* PlantMoistureNotifierTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PlantMoistureNotifierTests.m; sourceTree = "<group>"; };
+		B38E29411A5CD13F008573A4 /* PMNPlantSeletionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PMNPlantSeletionViewController.h; sourceTree = "<group>"; };
+		B38E29421A5CD13F008573A4 /* PMNPlantSeletionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PMNPlantSeletionViewController.m; sourceTree = "<group>"; };
+		B3EE8DCA1A5DAB9600E7D27C /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		C8C50BC4B18D08C5C5F64E46 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		B38E29151A5CCEEC008573A4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B3EE8DCB1A5DAB9600E7D27C /* CoreLocation.framework in Frameworks */,
+				C09FDD6949996A517E3F97CA /* libPods.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B38E292E1A5CCEEC008573A4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		18D71B452D329820A49DCDDE /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				6FFD34F514DDD4D0B3395CC8 /* Pods.debug.xcconfig */,
+				98232FE0F53FA21A228129C6 /* Pods.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		65518FEA3EF7E5AF456B0AE6 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				B3EE8DCA1A5DAB9600E7D27C /* CoreLocation.framework */,
+				C8C50BC4B18D08C5C5F64E46 /* libPods.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		B38E290F1A5CCEEB008573A4 = {
+			isa = PBXGroup;
+			children = (
+				B38E291A1A5CCEEC008573A4 /* PlantMoistureNotifier */,
+				B38E29341A5CCEEC008573A4 /* PlantMoistureNotifierTests */,
+				B38E29191A5CCEEC008573A4 /* Products */,
+				18D71B452D329820A49DCDDE /* Pods */,
+				65518FEA3EF7E5AF456B0AE6 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		B38E29191A5CCEEC008573A4 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				B38E29181A5CCEEC008573A4 /* PlantMoistureNotifier.app */,
+				B38E29311A5CCEEC008573A4 /* PlantMoistureNotifierTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		B38E291A1A5CCEEC008573A4 /* PlantMoistureNotifier */ = {
+			isa = PBXGroup;
+			children = (
+				B38E291F1A5CCEEC008573A4 /* AppDelegate.h */,
+				B38E29201A5CCEEC008573A4 /* AppDelegate.m */,
+				B38E29221A5CCEEC008573A4 /* PMNPlantListViewController.h */,
+				B38E29231A5CCEEC008573A4 /* PMNPlantListViewController.m */,
+				B38E29411A5CD13F008573A4 /* PMNPlantSeletionViewController.h */,
+				B38E29421A5CD13F008573A4 /* PMNPlantSeletionViewController.m */,
+				B38E29251A5CCEEC008573A4 /* Main.storyboard */,
+				B38E29281A5CCEEC008573A4 /* Images.xcassets */,
+				B38E292A1A5CCEEC008573A4 /* LaunchScreen.xib */,
+				B38E291B1A5CCEEC008573A4 /* Supporting Files */,
+			);
+			path = PlantMoistureNotifier;
+			sourceTree = "<group>";
+		};
+		B38E291B1A5CCEEC008573A4 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				B38E291C1A5CCEEC008573A4 /* Info.plist */,
+				B38E291D1A5CCEEC008573A4 /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		B38E29341A5CCEEC008573A4 /* PlantMoistureNotifierTests */ = {
+			isa = PBXGroup;
+			children = (
+				B38E29371A5CCEEC008573A4 /* PlantMoistureNotifierTests.m */,
+				B38E29351A5CCEEC008573A4 /* Supporting Files */,
+			);
+			path = PlantMoistureNotifierTests;
+			sourceTree = "<group>";
+		};
+		B38E29351A5CCEEC008573A4 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				B38E29361A5CCEEC008573A4 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		B38E29171A5CCEEC008573A4 /* PlantMoistureNotifier */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B38E293B1A5CCEEC008573A4 /* Build configuration list for PBXNativeTarget "PlantMoistureNotifier" */;
+			buildPhases = (
+				60AF20A75C6EC1C15666B51C /* Check Pods Manifest.lock */,
+				B38E29141A5CCEEC008573A4 /* Sources */,
+				B38E29151A5CCEEC008573A4 /* Frameworks */,
+				B38E29161A5CCEEC008573A4 /* Resources */,
+				BD2FA093367DAD2A211D8F58 /* Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = PlantMoistureNotifier;
+			productName = PlantMoistureNotifier;
+			productReference = B38E29181A5CCEEC008573A4 /* PlantMoistureNotifier.app */;
+			productType = "com.apple.product-type.application";
+		};
+		B38E29301A5CCEEC008573A4 /* PlantMoistureNotifierTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B38E293E1A5CCEEC008573A4 /* Build configuration list for PBXNativeTarget "PlantMoistureNotifierTests" */;
+			buildPhases = (
+				B38E292D1A5CCEEC008573A4 /* Sources */,
+				B38E292E1A5CCEEC008573A4 /* Frameworks */,
+				B38E292F1A5CCEEC008573A4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B38E29331A5CCEEC008573A4 /* PBXTargetDependency */,
+			);
+			name = PlantMoistureNotifierTests;
+			productName = PlantMoistureNotifierTests;
+			productReference = B38E29311A5CCEEC008573A4 /* PlantMoistureNotifierTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		B38E29101A5CCEEC008573A4 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0610;
+				ORGANIZATIONNAME = "Zeke Shearer";
+				TargetAttributes = {
+					B38E29171A5CCEEC008573A4 = {
+						CreatedOnToolsVersion = 6.1.1;
+					};
+					B38E29301A5CCEEC008573A4 = {
+						CreatedOnToolsVersion = 6.1.1;
+						TestTargetID = B38E29171A5CCEEC008573A4;
+					};
+				};
+			};
+			buildConfigurationList = B38E29131A5CCEEC008573A4 /* Build configuration list for PBXProject "PlantMoistureNotifier" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = B38E290F1A5CCEEB008573A4;
+			productRefGroup = B38E29191A5CCEEC008573A4 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				B38E29171A5CCEEC008573A4 /* PlantMoistureNotifier */,
+				B38E29301A5CCEEC008573A4 /* PlantMoistureNotifierTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		B38E29161A5CCEEC008573A4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B38E29271A5CCEEC008573A4 /* Main.storyboard in Resources */,
+				B38E292C1A5CCEEC008573A4 /* LaunchScreen.xib in Resources */,
+				B38E29291A5CCEEC008573A4 /* Images.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B38E292F1A5CCEEC008573A4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		60AF20A75C6EC1C15666B51C /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		BD2FA093367DAD2A211D8F58 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		B38E29141A5CCEEC008573A4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B38E29241A5CCEEC008573A4 /* PMNPlantListViewController.m in Sources */,
+				B38E29211A5CCEEC008573A4 /* AppDelegate.m in Sources */,
+				B38E29431A5CD13F008573A4 /* PMNPlantSeletionViewController.m in Sources */,
+				B38E291E1A5CCEEC008573A4 /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B38E292D1A5CCEEC008573A4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B38E29381A5CCEEC008573A4 /* PlantMoistureNotifierTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		B38E29331A5CCEEC008573A4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B38E29171A5CCEEC008573A4 /* PlantMoistureNotifier */;
+			targetProxy = B38E29321A5CCEEC008573A4 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		B38E29251A5CCEEC008573A4 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				B38E29261A5CCEEC008573A4 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		B38E292A1A5CCEEC008573A4 /* LaunchScreen.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				B38E292B1A5CCEEC008573A4 /* Base */,
+			);
+			name = LaunchScreen.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		B38E29391A5CCEEC008573A4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		B38E293A1A5CCEEC008573A4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		B38E293C1A5CCEEC008573A4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6FFD34F514DDD4D0B3395CC8 /* Pods.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = PlantMoistureNotifier/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		B38E293D1A5CCEEC008573A4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 98232FE0F53FA21A228129C6 /* Pods.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = PlantMoistureNotifier/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		B38E293F1A5CCEEC008573A4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = PlantMoistureNotifierTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PlantMoistureNotifier.app/PlantMoistureNotifier";
+			};
+			name = Debug;
+		};
+		B38E29401A5CCEEC008573A4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = PlantMoistureNotifierTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PlantMoistureNotifier.app/PlantMoistureNotifier";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		B38E29131A5CCEEC008573A4 /* Build configuration list for PBXProject "PlantMoistureNotifier" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B38E29391A5CCEEC008573A4 /* Debug */,
+				B38E293A1A5CCEEC008573A4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B38E293B1A5CCEEC008573A4 /* Build configuration list for PBXNativeTarget "PlantMoistureNotifier" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B38E293C1A5CCEEC008573A4 /* Debug */,
+				B38E293D1A5CCEEC008573A4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B38E293E1A5CCEEC008573A4 /* Build configuration list for PBXNativeTarget "PlantMoistureNotifierTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B38E293F1A5CCEEC008573A4 /* Debug */,
+				B38E29401A5CCEEC008573A4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = B38E29101A5CCEEC008573A4 /* Project object */;
+}
