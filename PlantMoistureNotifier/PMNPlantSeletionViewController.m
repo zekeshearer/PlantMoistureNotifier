@@ -10,7 +10,10 @@
 #import "PTDBean.h"
 #import "PTDBeanManager.h"
 
-@interface PMNPlantSeletionViewController () <UITableViewDelegate, UITableViewDataSource, PTDBeanManagerDelegate>
+static NSString *PMNBeaconUUIDPart1 = @"A495";
+static NSString *PMNBeaconUUIDPart2 = @"-C5B1-4B44-B512-1370F02D74DE";
+
+@interface PMNPlantSeletionViewController () <UITableViewDelegate, UITableViewDataSource, PTDBeanManagerDelegate, PTDBeanDelegate>
 
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *scanButton;
@@ -37,8 +40,12 @@
     self.beanManager = [[PTDBeanManager alloc] initWithDelegate:self];
 }
 
-#pragma mark - Action Methods
+- (NSString *)UUIDFromIdentifier:(NSInteger)identifier
+{
+    return @"";
+}
 
+#pragma mark - Action Methods
 
 - (IBAction)done:(id)sender
 {
@@ -118,11 +125,32 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [self.delegate plantSelectionViewController:self didSelectPlant:self.discoveredBeans[indexPath.row]];
+    PTDBean *bean;
+    
+    bean = self.discoveredBeans[indexPath.row];
+    [self fetchBeaconUUIDForBean:bean];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
-#pragma mark - Bean Manager
+#pragma mark - Bean Manager Delegate
+
+- (void)fetchBeaconUUIDForBean:(PTDBean *)bean
+{
+    NSError *error;
+    
+    [self.beanManager connectToBean:bean error:&error];
+    
+    if ( error ) {
+        [[[UIAlertView alloc] initWithTitle:@"Couldn't connect to bean" message:nil delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+    }
+}
+
+- (void)beanManager:(PTDBeanManager *)beanManager didConnectBean:(PTDBean *)bean error:(NSError *)error
+{
+    bean.delegate = self;
+
+    [bean sendSerialString:@"Give me your UUID, please."];
+}
 
 - (void)beanManagerDidUpdateState:(PTDBeanManager *)manager
 {
@@ -139,5 +167,21 @@
     [[self tableView] reloadData];
 }
 
+#pragma mark - Bean Delegate
+
+
+- (void)bean:(PTDBean *)bean serialDataReceived:(NSData *)data
+{
+    NSString *beaconUUID;
+    
+    beaconUUID = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    if ( beaconUUID ) {
+        [self.delegate plantSelectionViewController:self didSelectPlantName:bean.name beaconUUID:beaconUUID];
+    } else {
+        [[[UIAlertView alloc] initWithTitle:@"Couldn't pair with bean" message:nil delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+    }
+    bean.delegate = nil;
+    [self.beanManager disconnectBean:bean error:nil];
+}
 
 @end

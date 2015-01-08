@@ -20,7 +20,7 @@
 
 @protocol PMNPlantSelectionDelegate <NSObject>
 
-- (void)plantSelectionViewController:(PMNPlantSeletionViewController *)plantSelectionViewController didSelectPlant:(PTDBean *)plant;
+- (void)plantSelectionViewController:(PMNPlantSeletionViewController *)plantSelectionViewController didSelectPlantName:(NSString *)name beaconUUID:(NSString *)beaconUUID;
 - (void)plantSelectionViewControllerDidSelectDone:(PMNPlantSeletionViewController *)plantSelectionViewController;
 
 @end

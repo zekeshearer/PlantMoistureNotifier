@@ -91,12 +91,21 @@ static NSString *PMNPlantUUIDUserDefaultsKey = @"PMNPlantUUIDUserDefaultsKey";
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell;
+    NSString *plantName;
     
     cell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
     if ( !cell ) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Cell"];
     }
-    cell.textLabel.text = self.currentPlantNames[indexPath.row];
+    plantName = self.currentPlantNames[indexPath.row];
+    cell.textLabel.text = plantName;
+    
+    if ( [self.dryPlantNames containsObject:plantName] ) {
+        cell.contentView.backgroundColor = [UIColor redColor];
+    } else {
+        cell.contentView.backgroundColor = [UIColor whiteColor];
+    }
+    
     return cell;
 }
 
@@ -130,20 +139,20 @@ static NSString *PMNPlantUUIDUserDefaultsKey = @"PMNPlantUUIDUserDefaultsKey";
 
 #pragma mark - Plant Selection Delegate
 
-- (void)plantSelectionViewController:(PMNPlantSeletionViewController *)plantSelectionViewController didSelectPlant:(PTDBean *)plant
+- (void)plantSelectionViewController:(PMNPlantSeletionViewController *)plantSelectionViewController didSelectPlantName:(NSString *)name beaconUUID:(NSString *)beaconUUID;
 {
     NSMutableArray *mutablePlantNames;
     NSMutableArray *mutablePlantUUIDs;
     
     mutablePlantNames = self.currentPlantNames.mutableCopy;
-    [mutablePlantNames addObject:plant.name];
+    [mutablePlantNames addObject:name];
     mutablePlantUUIDs = self.currentPlantUUIDs.mutableCopy;
-    [mutablePlantUUIDs addObject:plant.identifier.UUIDString];
+    [mutablePlantUUIDs addObject:beaconUUID];
     
     [[NSUserDefaults standardUserDefaults] setObject:mutablePlantNames forKey:PMNPlantNamesUserDefaultsKey];
     [[NSUserDefaults standardUserDefaults] setObject:mutablePlantUUIDs forKey:PMNPlantUUIDUserDefaultsKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
-    [self addRegionForPlant:plant];
+    [self addRegionForPlantName:name plantUUID:beaconUUID];
     [self refreshPlants];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
@@ -155,11 +164,11 @@ static NSString *PMNPlantUUIDUserDefaultsKey = @"PMNPlantUUIDUserDefaultsKey";
 
 #pragma mark - Beacons
 
-- (void)addRegionForPlant:(PTDBean *)plant
+- (void)addRegionForPlantName:(NSString *)name plantUUID:(NSString *)UUIDString
 {
     CLBeaconRegion *region;
     
-    region = [[CLBeaconRegion alloc] initWithProximityUUID:plant.identifier identifier:plant.name];
+    region = [[CLBeaconRegion alloc] initWithProximityUUID:[[NSUUID alloc] initWithUUIDString:UUIDString] identifier:name];
     [self.locationManager startMonitoringForRegion:region];
 }
 
