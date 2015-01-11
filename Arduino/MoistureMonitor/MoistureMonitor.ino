@@ -33,11 +33,11 @@ void setup() {
     }
   }
   
-  uint16_t beaconIdentifier = identifier[0];
+  unsigned int beaconIdentifier = identifier[0];
   beaconIdentifier = beaconIdentifier<<8 + identifier[1];
-  uint16_t beaconMajor = identifier[2];
+  unsigned int beaconMajor = identifier[2];
   beaconMajor = beaconMajor<<8 + identifier[3];
-  uint16_t beaconMinor = identifier[4];
+  unsigned int beaconMinor = identifier[4];
   beaconMinor = beaconMinor<<8 + identifier[5];
   
   Bean.setBeaconParameters(beaconIdentifier,beaconMajor,beaconMinor);
