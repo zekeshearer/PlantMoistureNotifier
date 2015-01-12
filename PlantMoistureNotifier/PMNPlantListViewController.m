@@ -12,17 +12,20 @@
 
 @interface PMNPlantListViewController () <UITableViewDelegate, UITableViewDataSource, PMNPlantSelectionDelegate, CLLocationManagerDelegate>
 
-@property (nonatomic, strong) NSArray *currentPlantNames;
-@property (nonatomic, strong) NSArray *currentPlantUUIDs;
+@property (nonatomic, strong) NSArray *currentPlantDictionaries;
 @property (nonatomic, strong) CLLocationManager *locationManager;
-@property (nonatomic, strong) NSMutableArray *dryPlantNames;
+@property (nonatomic, strong) NSMutableArray *dryPlantIdentifiers;
 
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 
 @end
 
-static NSString *PMNPlantNamesUserDefaultsKey = @"PMNPlantNamesUserDefaultsKey";
-static NSString *PMNPlantUUIDUserDefaultsKey = @"PMNPlantUUIDUserDefaultsKey";
+static NSString *PMNPlantDictionariesKey = @"PMNPlantDictionariesKey";
+static NSString *PMNPlantNamesKey = @"PMNPlantNamesKey";
+static NSString *PMNPlantUUIDKey = @"PMNPlantUUIDKey";
+static NSString *PMNPlantMajorKey = @"PMNPlantMajorKey";
+static NSString *PMNPlantMinorKey = @"PMNPlantMinorKey";
+static NSString *PMNPlantIdentifierKey = @"PMNPlantIdentifierKey";
 
 @implementation PMNPlantListViewController
 
@@ -49,20 +52,16 @@ static NSString *PMNPlantUUIDUserDefaultsKey = @"PMNPlantUUIDUserDefaultsKey";
     
     if ( [destinationNavigationController isKindOfClass:[UINavigationController class]] ) {
         plantSelectionViewController = [destinationNavigationController.viewControllers firstObject];
-        plantSelectionViewController.currentlyAddedPlantNames = self.currentPlantNames;
+        plantSelectionViewController.currentlyAddedPlantNames = [self.currentPlantDictionaries valueForKeyPath:@"name"];
         plantSelectionViewController.delegate = self;
     }
 }
 
 - (void)refreshPlants
 {
-    self.currentPlantNames = [[NSUserDefaults standardUserDefaults] arrayForKey:PMNPlantNamesUserDefaultsKey];
-    if ( !self.currentPlantNames ) {
-        self.currentPlantNames = [NSArray array];
-    }
-    self.currentPlantUUIDs = [[NSUserDefaults standardUserDefaults] arrayForKey:PMNPlantUUIDUserDefaultsKey];
-    if ( !self.currentPlantUUIDs ) {
-        self.currentPlantUUIDs = [NSArray array];
+    self.currentPlantDictionaries = [[NSUserDefaults standardUserDefaults] arrayForKey:PMNPlantDictionariesKey];
+    if ( !self.currentPlantDictionaries ) {
+        self.currentPlantDictionaries = [NSArray array];
     }
     [self updateDryPlants];
     [self.tableView reloadData];
@@ -73,9 +72,9 @@ static NSString *PMNPlantUUIDUserDefaultsKey = @"PMNPlantUUIDUserDefaultsKey";
     NSSet *regions;
     
     regions = self.locationManager.monitoredRegions;
-    self.dryPlantNames = [NSMutableArray array];
+    self.dryPlantIdentifiers = [NSMutableArray array];
     for ( CLRegion *region in regions ) {
-        if ( [self.currentPlantNames containsObject:region.identifier] ) {
+        if ( [[self.currentPlantDictionaries valueForKeyPath:PMNPlantIdentifierKey] containsObject:region.identifier] ) {
             [self.locationManager requestStateForRegion:region];
         }
     }
@@ -85,22 +84,22 @@ static NSString *PMNPlantUUIDUserDefaultsKey = @"PMNPlantUUIDUserDefaultsKey";
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return  self.currentPlantNames.count;
+    return self.currentPlantDictionaries.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell;
-    NSString *plantName;
+    NSDictionary *plant;
     
     cell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
     if ( !cell ) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Cell"];
     }
-    plantName = self.currentPlantNames[indexPath.row];
-    cell.textLabel.text = plantName;
+    plant = self.currentPlantDictionaries[indexPath.row];
+    cell.textLabel.text = [plant valueForKey:PMNPlantNamesKey];
     
-    if ( [self.dryPlantNames containsObject:plantName] ) {
+    if ( [self.dryPlantIdentifiers containsObject:plant] ) {
         cell.contentView.backgroundColor = [UIColor redColor];
     } else {
         cell.contentView.backgroundColor = [UIColor whiteColor];
@@ -116,18 +115,16 @@ static NSString *PMNPlantUUIDUserDefaultsKey = @"PMNPlantUUIDUserDefaultsKey";
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSMutableArray *mutablePlantNames;
-    NSMutableArray *mutablePlantUUIDs;
+    NSMutableArray *mutableCurrentPlants;
+    NSDictionary *plant;
     
-    mutablePlantNames = self.currentPlantNames.mutableCopy;
-    [mutablePlantNames removeObjectAtIndex:indexPath.row];
-    mutablePlantUUIDs = self.currentPlantUUIDs.mutableCopy;
-    [mutablePlantUUIDs removeObjectAtIndex:indexPath.row];
+    plant = self.currentPlantDictionaries[indexPath.row];
     
-    [[NSUserDefaults standardUserDefaults] setObject:mutablePlantNames forKey:PMNPlantNamesUserDefaultsKey];
-    [[NSUserDefaults standardUserDefaults] setObject:mutablePlantUUIDs forKey:PMNPlantUUIDUserDefaultsKey];
+    mutableCurrentPlants = self.currentPlantDictionaries.mutableCopy;
+    [mutableCurrentPlants removeObject:self.currentPlantDictionaries[indexPath.row]];
+    [[NSUserDefaults standardUserDefaults] setObject:mutableCurrentPlants forKey:PMNPlantDictionariesKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
-    [self removeRegionForPlantName:self.currentPlantNames[indexPath.row] plantUUID:self.currentPlantUUIDs[indexPath.row]];
+    [self removeRegionForPlantName:plant[PMNPlantNamesKey] plantUUID:plant[PMNPlantUUIDKey] Major:plant[PMNPlantMajorKey] Minor:plant[PMNPlantMinorKey]];
     
     [self refreshPlants];
 }
@@ -139,20 +136,17 @@ static NSString *PMNPlantUUIDUserDefaultsKey = @"PMNPlantUUIDUserDefaultsKey";
 
 #pragma mark - Plant Selection Delegate
 
-- (void)plantSelectionViewController:(PMNPlantSeletionViewController *)plantSelectionViewController didSelectPlantName:(NSString *)name beaconUUID:(NSString *)beaconUUID;
+- (void)plantSelectionViewController:(PMNPlantSeletionViewController *)plantSelectionViewController didSelectPlantName:(NSString *)name beaconUUID:(NSString *)beaconUUID major:(NSString *)major minor:(NSString *)minor identifier:(NSString *)identifier
 {
-    NSMutableArray *mutablePlantNames;
-    NSMutableArray *mutablePlantUUIDs;
+    NSMutableArray *mutableCurrentPlants;
+    NSDictionary *plant;
     
-    mutablePlantNames = self.currentPlantNames.mutableCopy;
-    [mutablePlantNames addObject:name];
-    mutablePlantUUIDs = self.currentPlantUUIDs.mutableCopy;
-    [mutablePlantUUIDs addObject:beaconUUID];
-    
-    [[NSUserDefaults standardUserDefaults] setObject:mutablePlantNames forKey:PMNPlantNamesUserDefaultsKey];
-    [[NSUserDefaults standardUserDefaults] setObject:mutablePlantUUIDs forKey:PMNPlantUUIDUserDefaultsKey];
+    plant = [self plantDictionaryFromUUID:beaconUUID name:name major:major minor:minor identifier:identifier];
+    mutableCurrentPlants = self.currentPlantDictionaries.mutableCopy;
+    [mutableCurrentPlants addObject:plant];
+    [[NSUserDefaults standardUserDefaults] setObject:mutableCurrentPlants forKey:PMNPlantDictionariesKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
-    [self addRegionForPlantName:name plantUUID:beaconUUID];
+    [self addRegionForPlantName:name plantUUID:beaconUUID major:major minor:minor];
     [self refreshPlants];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
@@ -164,26 +158,26 @@ static NSString *PMNPlantUUIDUserDefaultsKey = @"PMNPlantUUIDUserDefaultsKey";
 
 #pragma mark - Beacons
 
-- (void)addRegionForPlantName:(NSString *)name plantUUID:(NSString *)UUIDString
+- (void)addRegionForPlantName:(NSString *)name plantUUID:(NSString *)UUIDString major:(NSString *)major minor:(NSString *)minor
 {
     CLBeaconRegion *region;
     
-    region = [[CLBeaconRegion alloc] initWithProximityUUID:[[NSUUID alloc] initWithUUIDString:UUIDString] identifier:name];
+    region = [[CLBeaconRegion alloc] initWithProximityUUID:[[NSUUID alloc] initWithUUIDString:UUIDString] major:major.integerValue minor:minor.integerValue identifier:name];
     [self.locationManager startMonitoringForRegion:region];
 }
 
-- (void)removeRegionForPlantName:(NSString *)name plantUUID:(NSString *)UUIDString
+- (void)removeRegionForPlantName:(NSString *)name plantUUID:(NSString *)UUIDString Major:(NSString *)major Minor:(NSString *)minor
 {
     CLBeaconRegion *region;
     
-    region = [[CLBeaconRegion alloc] initWithProximityUUID:[[NSUUID alloc] initWithUUIDString:UUIDString] identifier:name];
+    region = [[CLBeaconRegion alloc] initWithProximityUUID:[[NSUUID alloc] initWithUUIDString:UUIDString] major:major.integerValue minor:minor.integerValue identifier:name];
     [self.locationManager stopMonitoringForRegion:region];
 }
 
 - (void)locationManager:(CLLocationManager *)manager didDetermineState:(CLRegionState)state forRegion:(CLRegion *)region
 {
     if ( state == CLRegionStateInside ) {
-        [self.dryPlantNames addObject:region.identifier];
+        [self.dryPlantIdentifiers addObject:region.identifier];
     }
     [self.tableView reloadData];
 }
@@ -197,8 +191,17 @@ static NSString *PMNPlantUUIDUserDefaultsKey = @"PMNPlantUUIDUserDefaultsKey";
     notification = [[UILocalNotification alloc] init];
     notification.alertBody = [NSString stringWithFormat:@"%@ needs to be watered", region.identifier];
     [[UIApplication sharedApplication] presentLocalNotificationNow:notification];
-    
-    //post local notification
+}
+
+- (NSDictionary *)plantDictionaryFromUUID:(NSString *)UUID name:(NSString *)name major:(NSString *)major minor:(NSString *)minor identifier:(NSString *)identifier
+{
+    return @{
+             PMNPlantUUIDKey:UUID,
+             PMNPlantNamesKey:name,
+             PMNPlantNamesKey:major,
+             PMNPlantMinorKey:minor,
+             PMNPlantIdentifierKey:identifier
+             };
 }
 
 @end

@@ -12,6 +12,7 @@
 
 static NSString *PMNBeaconUUIDPart1 = @"A495";
 static NSString *PMNBeaconUUIDPart2 = @"-C5B1-4B44-B512-1370F02D74DE";
+static NSInteger PMNBeaconIdentiferResponseLength = 25;  // length of "Unique ID: 0xff7731a4ce3b"
 
 @interface PMNPlantSeletionViewController () <UITableViewDelegate, UITableViewDataSource, PTDBeanManagerDelegate, PTDBeanDelegate>
 
@@ -22,6 +23,7 @@ static NSString *PMNBeaconUUIDPart2 = @"-C5B1-4B44-B512-1370F02D74DE";
 @property (strong, nonatomic) PTDBeanManager *beanManager;
 @property (strong, nonatomic) NSTimer *scanningTimer;
 @property (strong, nonatomic) NSMutableArray *discoveredBeans;
+@property (strong, nonatomic) NSString *identifierString;
 
 @end
 
@@ -57,7 +59,7 @@ static NSString *PMNBeaconUUIDPart2 = @"-C5B1-4B44-B512-1370F02D74DE";
     if ( self.scanningTimer.valid ) {
         [self stopScan:sender];
     } else {
-        [self startScan];
+        [self rescanAction:sender];
     }
 }
 
@@ -148,8 +150,9 @@ static NSString *PMNBeaconUUIDPart2 = @"-C5B1-4B44-B512-1370F02D74DE";
 - (void)beanManager:(PTDBeanManager *)beanManager didConnectBean:(PTDBean *)bean error:(NSError *)error
 {
     bean.delegate = self;
-
-    [bean sendSerialString:@"Give me your UUID, please."];
+    [bean releaseSerialGate];
+    self.identifierString = [[NSString alloc] init];
+    [bean sendSerialString:@"UUID"];
 }
 
 - (void)beanManagerDidUpdateState:(PTDBeanManager *)manager
@@ -169,19 +172,43 @@ static NSString *PMNBeaconUUIDPart2 = @"-C5B1-4B44-B512-1370F02D74DE";
 
 #pragma mark - Bean Delegate
 
-
 - (void)bean:(PTDBean *)bean serialDataReceived:(NSData *)data
 {
     NSString *beaconUUID;
+    NSArray *beaconIdentifiers;
     
     beaconUUID = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-    if ( beaconUUID ) {
-        [self.delegate plantSelectionViewController:self didSelectPlantName:bean.name beaconUUID:beaconUUID];
-    } else {
-        [[[UIAlertView alloc] initWithTitle:@"Couldn't pair with bean" message:nil delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+    self.identifierString = [self.identifierString stringByAppendingString:beaconUUID];
+    if ( self.identifierString.length == PMNBeaconIdentiferResponseLength ) {
+        beaconIdentifiers = [self beaconIdentifiersFromString:self.identifierString];
+        if ( beaconIdentifiers.count ) {
+            [self.delegate plantSelectionViewController:self didSelectPlantName:bean.name beaconUUID:beaconIdentifiers[0] major:beaconIdentifiers[1] minor:beaconIdentifiers[2] identifier:beaconUUID];
+            self.identifierString = nil;
+            [self.beanManager disconnectBean:bean error:nil];
+            
+        }
     }
-    bean.delegate = nil;
-    [self.beanManager disconnectBean:bean error:nil];
+}
+
+- (NSString *)beaconUUIDFromIdentifier:(NSString *)identifierString
+{
+    return [NSString stringWithFormat:@"%@%@%@",PMNBeaconUUIDPart1,identifierString,PMNBeaconUUIDPart2];
+}
+
+- (NSArray *)beaconIdentifiersFromString:(NSString *)identifierString
+{
+    NSString *beaconUUID;
+    NSString *beaconMajor;
+    NSString *beaconMinor;
+    
+    if ( identifierString.length != PMNBeaconIdentiferResponseLength ) {
+        return nil;
+    }
+    beaconUUID = [self beaconUUIDFromIdentifier:[identifierString substringWithRange:NSMakeRange(13, 4)]];
+    beaconMajor = [identifierString substringWithRange:NSMakeRange(17, 4)];
+    beaconMinor = [identifierString substringWithRange:NSMakeRange(21, 4)];
+    
+    return @[beaconUUID, beaconMajor, beaconMinor];
 }
 
 @end
