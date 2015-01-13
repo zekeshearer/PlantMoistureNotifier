@@ -9,12 +9,13 @@
 #import "PMNPlantSeletionViewController.h"
 #import "PTDBean.h"
 #import "PTDBeanManager.h"
+#import "PTDIntelHex.h"
 
 static NSString *PMNBeaconUUIDPart1 = @"A495";
 static NSString *PMNBeaconUUIDPart2 = @"-C5B1-4B44-B512-1370F02D74DE";
 static NSInteger PMNBeaconIdentiferResponseLength = 25;  // length of "Unique ID: 0xff7731a4ce3b"
 
-@interface PMNPlantSeletionViewController () <UITableViewDelegate, UITableViewDataSource, PTDBeanManagerDelegate, PTDBeanDelegate>
+@interface PMNPlantSeletionViewController () <UITableViewDelegate, UITableViewDataSource, PTDBeanManagerDelegate, PTDBeanDelegate, UIAlertViewDelegate>
 
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *scanButton;
@@ -22,8 +23,12 @@ static NSInteger PMNBeaconIdentiferResponseLength = 25;  // length of "Unique ID
 
 @property (strong, nonatomic) PTDBeanManager *beanManager;
 @property (strong, nonatomic) NSTimer *scanningTimer;
+@property (strong, nonatomic) NSTimer *serialResponseTimer;
 @property (strong, nonatomic) NSMutableArray *discoveredBeans;
 @property (strong, nonatomic) NSString *identifierString;
+@property (strong, nonatomic) PTDBean *currentBean;
+@property (strong, nonatomic) UIProgressView *progressView;
+@property (strong, nonatomic) UIAlertView *progressAlertView;
 
 @end
 
@@ -33,6 +38,8 @@ static NSInteger PMNBeaconIdentiferResponseLength = 25;  // length of "Unique ID
 {
     [super viewDidLoad];
     [self setup];
+    
+    [self sketchHexFile];
     // Do any additional setup after loading the view.
 }
 
@@ -42,9 +49,19 @@ static NSInteger PMNBeaconIdentiferResponseLength = 25;  // length of "Unique ID
     self.beanManager = [[PTDBeanManager alloc] initWithDelegate:self];
 }
 
-- (NSString *)UUIDFromIdentifier:(NSInteger)identifier
+- (void)showProgressView
 {
-    return @"";
+    self.progressView = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleDefault];
+    [self.progressView setProgress:0 animated:NO];
+    self.progressAlertView = [[UIAlertView alloc] initWithTitle:@"Programming Sketch" message:nil delegate:nil cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
+    [self.progressAlertView addSubview:self.progressView];
+    [self.progressAlertView show];
+}
+
+- (void)dismissProgressView
+{
+    [self.progressAlertView dismissWithClickedButtonIndex:self.progressAlertView.cancelButtonIndex animated:YES];
+    self.progressView = nil;
 }
 
 #pragma mark - Action Methods
@@ -82,7 +99,7 @@ static NSInteger PMNBeaconIdentiferResponseLength = 25;  // length of "Unique ID
     NSError *error;
     [self.beanManager startScanningForBeans_error:&error];
     if (error) {
-        if ( error.code == 1 ) {
+        if ( error.code == 1 || error.code == 2 ) {
             [[[UIAlertView alloc] initWithTitle:@"Bluetooth Required" message:@"Enable Bluetooth in iOS Settings." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
         }
         [self.delegate plantSelectionViewControllerDidSelectDone:self];
@@ -102,6 +119,11 @@ static NSInteger PMNBeaconIdentiferResponseLength = 25;  // length of "Unique ID
     if ( self.scanningTimer ) {
         [self.scanningTimer invalidate];
     }
+}
+
+- (void)serialResponseFailed:(NSTimer *)sender
+{
+    [[[UIAlertView alloc] initWithTitle:@"Bean Not Pairing" message:@"Would you like to program the current bean with the Moisture Sensor sketch?" delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Program", nil] show];
 }
 
 #pragma mark - TableView
@@ -151,7 +173,9 @@ static NSInteger PMNBeaconIdentiferResponseLength = 25;  // length of "Unique ID
 {
     bean.delegate = self;
     [bean releaseSerialGate];
+    self.currentBean = bean;
     self.identifierString = [[NSString alloc] init];
+    self.serialResponseTimer = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(serialResponseFailed:) userInfo:nil repeats:NO];
     [bean sendSerialString:@"UUID"];
 }
 
@@ -182,12 +206,25 @@ static NSInteger PMNBeaconIdentiferResponseLength = 25;  // length of "Unique ID
     if ( self.identifierString.length == PMNBeaconIdentiferResponseLength ) {
         beaconIdentifiers = [self beaconIdentifiersFromString:self.identifierString];
         if ( beaconIdentifiers.count ) {
-            [self.delegate plantSelectionViewController:self didSelectPlantName:bean.name beaconUUID:beaconIdentifiers[0] major:beaconIdentifiers[1] minor:beaconIdentifiers[2] identifier:beaconUUID];
+            [self.serialResponseTimer invalidate];
+            self.serialResponseTimer = nil;
+            [self.delegate plantSelectionViewController:self didSelectPlantName:bean.name beaconUUID:beaconIdentifiers[0] major:beaconIdentifiers[1] minor:beaconIdentifiers[2] identifier:[self.identifierString substringFromIndex:13]];
             self.identifierString = nil;
             [self.beanManager disconnectBean:bean error:nil];
-            
         }
     }
+}
+
+- (void)bean:(PTDBean *)bean didProgramArduinoWithError:(NSError *)error
+{
+    [self dismissProgressView];
+    [self.beanManager disconnectBean:bean error:nil];
+    self.currentBean = nil;
+}
+
+- (void)bean:(PTDBean *)bean ArduinoProgrammingTimeLeft:(NSNumber *)seconds withPercentage:(NSNumber *)percentageComplete
+{
+    [self.progressView setProgress:percentageComplete.floatValue animated:YES];
 }
 
 - (NSString *)beaconUUIDFromIdentifier:(NSString *)identifierString
@@ -209,6 +246,32 @@ static NSInteger PMNBeaconIdentiferResponseLength = 25;  // length of "Unique ID
     beaconMinor = [identifierString substringWithRange:NSMakeRange(21, 4)];
     
     return @[beaconUUID, beaconMajor, beaconMinor];
+}
+
+#pragma mark - AlertView Delegate
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    PTDIntelHex *sketchHexFile;
+    
+    if ( buttonIndex != alertView.cancelButtonIndex ) {
+        sketchHexFile = [self sketchHexFile];
+        if ( sketchHexFile ) {
+            [self.currentBean programArduinoWithRawHexImage:sketchHexFile.bytes andImageName:sketchHexFile.name];
+            [self showProgressView];
+        }
+    }
+}
+
+- (PTDIntelHex *)sketchHexFile
+{
+    NSString *path;
+    PTDIntelHex *sketchHexFile;
+    
+    path = [[NSBundle mainBundle] resourcePath];
+    path = [path stringByAppendingPathComponent:@"MoistureMonitor.cpp.hex"];
+    sketchHexFile = [[PTDIntelHex alloc] initWithFileURL:[NSURL URLWithString:path]];
+    return sketchHexFile;
 }
 
 @end

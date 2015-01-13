@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B36494281A64E61D0067656A /* MoistureMonitor.cpp.hex in Resources */ = {isa = PBXBuildFile; fileRef = B36494271A64E61D0067656A /* MoistureMonitor.cpp.hex */; };
+		B364942C1A64FBC50067656A /* PTDIntelHex.m in Sources */ = {isa = PBXBuildFile; fileRef = B364942B1A64FBC50067656A /* PTDIntelHex.m */; };
 		B38E291E1A5CCEEC008573A4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B38E291D1A5CCEEC008573A4 /* main.m */; };
 		B38E29211A5CCEEC008573A4 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B38E29201A5CCEEC008573A4 /* AppDelegate.m */; };
 		B38E29241A5CCEEC008573A4 /* PMNPlantListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B38E29231A5CCEEC008573A4 /* PMNPlantListViewController.m */; };
@@ -32,6 +34,9 @@
 /* Begin PBXFileReference section */
 		6FFD34F514DDD4D0B3395CC8 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		98232FE0F53FA21A228129C6 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		B36494271A64E61D0067656A /* MoistureMonitor.cpp.hex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = MoistureMonitor.cpp.hex; path = Arduino/MoistureMonitor.cpp.hex; sourceTree = SOURCE_ROOT; };
+		B364942A1A64FBC50067656A /* PTDIntelHex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PTDIntelHex.h; sourceTree = "<group>"; };
+		B364942B1A64FBC50067656A /* PTDIntelHex.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PTDIntelHex.m; sourceTree = "<group>"; };
 		B38E29181A5CCEEC008573A4 /* PlantMoistureNotifier.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PlantMoistureNotifier.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B38E291C1A5CCEEC008573A4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B38E291D1A5CCEEC008573A4 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -118,6 +123,8 @@
 				B38E29231A5CCEEC008573A4 /* PMNPlantListViewController.m */,
 				B38E29411A5CD13F008573A4 /* PMNPlantSeletionViewController.h */,
 				B38E29421A5CD13F008573A4 /* PMNPlantSeletionViewController.m */,
+				B364942A1A64FBC50067656A /* PTDIntelHex.h */,
+				B364942B1A64FBC50067656A /* PTDIntelHex.m */,
 				B38E29251A5CCEEC008573A4 /* Main.storyboard */,
 				B38E29281A5CCEEC008573A4 /* Images.xcassets */,
 				B38E292A1A5CCEEC008573A4 /* LaunchScreen.xib */,
@@ -129,6 +136,7 @@
 		B38E291B1A5CCEEC008573A4 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				B36494271A64E61D0067656A /* MoistureMonitor.cpp.hex */,
 				B38E291C1A5CCEEC008573A4 /* Info.plist */,
 				B38E291D1A5CCEEC008573A4 /* main.m */,
 			);
@@ -237,6 +245,7 @@
 				B38E29271A5CCEEC008573A4 /* Main.storyboard in Resources */,
 				B38E292C1A5CCEEC008573A4 /* LaunchScreen.xib in Resources */,
 				B38E29291A5CCEEC008573A4 /* Images.xcassets in Resources */,
+				B36494281A64E61D0067656A /* MoistureMonitor.cpp.hex in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -288,6 +297,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B38E29241A5CCEEC008573A4 /* PMNPlantListViewController.m in Sources */,
+				B364942C1A64FBC50067656A /* PTDIntelHex.m in Sources */,
 				B38E29211A5CCEEC008573A4 /* AppDelegate.m in Sources */,
 				B38E29431A5CD13F008573A4 /* PMNPlantSeletionViewController.m in Sources */,
 				B38E291E1A5CCEEC008573A4 /* main.m in Sources */,

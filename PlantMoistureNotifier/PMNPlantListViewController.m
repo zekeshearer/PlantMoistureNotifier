@@ -21,7 +21,7 @@
 @end
 
 static NSString *PMNPlantDictionariesKey = @"PMNPlantDictionariesKey";
-static NSString *PMNPlantNamesKey = @"PMNPlantNamesKey";
+static NSString *PMNPlantNameKey = @"PMNPlantNameKey";
 static NSString *PMNPlantUUIDKey = @"PMNPlantUUIDKey";
 static NSString *PMNPlantMajorKey = @"PMNPlantMajorKey";
 static NSString *PMNPlantMinorKey = @"PMNPlantMinorKey";
@@ -40,6 +40,7 @@ static NSString *PMNPlantIdentifierKey = @"PMNPlantIdentifierKey";
 - (void)setup
 {
     self.locationManager = [[CLLocationManager alloc] init];
+    self.locationManager.delegate = self;
     [self.locationManager requestAlwaysAuthorization];
 }
 
@@ -52,7 +53,7 @@ static NSString *PMNPlantIdentifierKey = @"PMNPlantIdentifierKey";
     
     if ( [destinationNavigationController isKindOfClass:[UINavigationController class]] ) {
         plantSelectionViewController = [destinationNavigationController.viewControllers firstObject];
-        plantSelectionViewController.currentlyAddedPlantNames = [self.currentPlantDictionaries valueForKeyPath:@"name"];
+        plantSelectionViewController.currentlyAddedPlantNames = [self.currentPlantDictionaries valueForKeyPath:PMNPlantNameKey];
         plantSelectionViewController.delegate = self;
     }
 }
@@ -97,9 +98,9 @@ static NSString *PMNPlantIdentifierKey = @"PMNPlantIdentifierKey";
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Cell"];
     }
     plant = self.currentPlantDictionaries[indexPath.row];
-    cell.textLabel.text = [plant valueForKey:PMNPlantNamesKey];
+    cell.textLabel.text = [plant valueForKey:PMNPlantNameKey];
     
-    if ( [self.dryPlantIdentifiers containsObject:plant] ) {
+    if ( [self.dryPlantIdentifiers containsObject:plant[PMNPlantIdentifierKey]] ) {
         cell.contentView.backgroundColor = [UIColor redColor];
     } else {
         cell.contentView.backgroundColor = [UIColor whiteColor];
@@ -124,7 +125,7 @@ static NSString *PMNPlantIdentifierKey = @"PMNPlantIdentifierKey";
     [mutableCurrentPlants removeObject:self.currentPlantDictionaries[indexPath.row]];
     [[NSUserDefaults standardUserDefaults] setObject:mutableCurrentPlants forKey:PMNPlantDictionariesKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
-    [self removeRegionForPlantName:plant[PMNPlantNamesKey] plantUUID:plant[PMNPlantUUIDKey] Major:plant[PMNPlantMajorKey] Minor:plant[PMNPlantMinorKey]];
+    [self removeRegionForPlantName:plant[PMNPlantNameKey] plantUUID:plant[PMNPlantUUIDKey] major:plant[PMNPlantMajorKey] minor:plant[PMNPlantMinorKey] identifier:plant[PMNPlantIdentifierKey]];
     
     [self refreshPlants];
 }
@@ -146,7 +147,7 @@ static NSString *PMNPlantIdentifierKey = @"PMNPlantIdentifierKey";
     [mutableCurrentPlants addObject:plant];
     [[NSUserDefaults standardUserDefaults] setObject:mutableCurrentPlants forKey:PMNPlantDictionariesKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
-    [self addRegionForPlantName:name plantUUID:beaconUUID major:major minor:minor];
+    [self addRegionForPlantName:name plantUUID:beaconUUID major:major minor:minor identifier:identifier];
     [self refreshPlants];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
@@ -158,19 +159,20 @@ static NSString *PMNPlantIdentifierKey = @"PMNPlantIdentifierKey";
 
 #pragma mark - Beacons
 
-- (void)addRegionForPlantName:(NSString *)name plantUUID:(NSString *)UUIDString major:(NSString *)major minor:(NSString *)minor
+- (void)addRegionForPlantName:(NSString *)name plantUUID:(NSString *)UUIDString major:(NSString *)major minor:(NSString *)minor identifier:(NSString *)identifier
 {
     CLBeaconRegion *region;
     
-    region = [[CLBeaconRegion alloc] initWithProximityUUID:[[NSUUID alloc] initWithUUIDString:UUIDString] major:major.integerValue minor:minor.integerValue identifier:name];
+    region = [[CLBeaconRegion alloc] initWithProximityUUID:[[NSUUID alloc] initWithUUIDString:UUIDString] major:major.integerValue minor:minor.integerValue identifier:identifier];
     [self.locationManager startMonitoringForRegion:region];
 }
 
-- (void)removeRegionForPlantName:(NSString *)name plantUUID:(NSString *)UUIDString Major:(NSString *)major Minor:(NSString *)minor
+- (void)removeRegionForPlantName:(NSString *)name plantUUID:(NSString *)UUIDString major:(NSString *)major minor:(NSString *)minor identifier:(NSString *)identifier
 {
     CLBeaconRegion *region;
     
-    region = [[CLBeaconRegion alloc] initWithProximityUUID:[[NSUUID alloc] initWithUUIDString:UUIDString] major:major.integerValue minor:minor.integerValue identifier:name];
+    region = [[CLBeaconRegion alloc] initWithProximityUUID:[[NSUUID alloc] initWithUUIDString:UUIDString] major:major.integerValue minor:minor.integerValue identifier:identifier];
+    
     [self.locationManager stopMonitoringForRegion:region];
 }
 
@@ -185,11 +187,22 @@ static NSString *PMNPlantIdentifierKey = @"PMNPlantIdentifierKey";
 - (void)locationManager:(CLLocationManager *)manager didEnterRegion:(CLRegion *)region
 {
     UILocalNotification *notification;
+    NSDictionary *plant;
     
     [self.tableView reloadData];
     
+    for ( NSDictionary *thisPlant in self.currentPlantDictionaries ) {
+        if ( [[thisPlant valueForKey:PMNPlantIdentifierKey] isEqualToString:region.identifier] ) {
+            plant = thisPlant;
+            break;
+        }
+    }
+    if ( !plant ) {
+        return;
+    }
+    
     notification = [[UILocalNotification alloc] init];
-    notification.alertBody = [NSString stringWithFormat:@"%@ needs to be watered", region.identifier];
+    notification.alertBody = [NSString stringWithFormat:@"%@ needs to be watered", plant[PMNPlantNameKey]];
     [[UIApplication sharedApplication] presentLocalNotificationNow:notification];
 }
 
@@ -197,8 +210,8 @@ static NSString *PMNPlantIdentifierKey = @"PMNPlantIdentifierKey";
 {
     return @{
              PMNPlantUUIDKey:UUID,
-             PMNPlantNamesKey:name,
-             PMNPlantNamesKey:major,
+             PMNPlantNameKey:name,
+             PMNPlantNameKey:major,
              PMNPlantMinorKey:minor,
              PMNPlantIdentifierKey:identifier
              };
