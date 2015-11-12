@@ -174,6 +174,7 @@ static NSInteger PMNBeaconIdentiferResponseLength = 25;  // length of "Unique ID
     bean.delegate = self;
     [bean releaseSerialGate];
     self.currentBean = bean;
+    
     self.identifierString = [[NSString alloc] init];
     self.serialResponseTimer = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(serialResponseFailed:) userInfo:nil repeats:NO];
     [bean sendSerialString:@"UUID"];
@@ -213,6 +214,7 @@ static NSInteger PMNBeaconIdentiferResponseLength = 25;  // length of "Unique ID
             [self.beanManager disconnectBean:bean error:nil];
         }
     }
+    
 }
 
 - (void)bean:(PTDBean *)bean didProgramArduinoWithError:(NSError *)error
@@ -237,13 +239,26 @@ static NSInteger PMNBeaconIdentiferResponseLength = 25;  // length of "Unique ID
     NSString *beaconUUID;
     NSString *beaconMajor;
     NSString *beaconMinor;
+    NSScanner *scanner;
+    uint decimalInteger;
     
     if ( identifierString.length != PMNBeaconIdentiferResponseLength ) {
         return nil;
     }
-    beaconUUID = [self beaconUUIDFromIdentifier:[identifierString substringWithRange:NSMakeRange(13, 4)]];
-    beaconMajor = [identifierString substringWithRange:NSMakeRange(17, 4)];
-    beaconMinor = [identifierString substringWithRange:NSMakeRange(21, 4)];
+    
+    //there's got to be a better way to do this
+    
+    scanner = [[NSScanner alloc] initWithString:[identifierString substringWithRange:NSMakeRange(13, 4)]];
+    [scanner scanHexInt:&decimalInteger];
+    beaconUUID = [self beaconUUIDFromIdentifier:[[NSString stringWithFormat:@"%i",decimalInteger] substringToIndex:4]];
+    
+    scanner = [[NSScanner alloc] initWithString:[identifierString substringWithRange:NSMakeRange(17, 4)]];
+    [scanner scanHexInt:&decimalInteger];
+    beaconMajor = [NSString stringWithFormat:@"%i",decimalInteger];
+    
+    scanner = [[NSScanner alloc] initWithString:[identifierString substringWithRange:NSMakeRange(21, 4)]];
+    [scanner scanHexInt:&decimalInteger];
+    beaconMinor = [NSString stringWithFormat:@"%i",decimalInteger];
     
     return @[beaconUUID, beaconMajor, beaconMinor];
 }

@@ -32,8 +32,8 @@ static NSString *PMNPlantIdentifierKey = @"PMNPlantIdentifierKey";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self refreshPlants];
     [self setup];
+    [self refreshPlants];
     // Do any additional setup after loading the view, typically from a nib.
 }
 
@@ -73,6 +73,11 @@ static NSString *PMNPlantIdentifierKey = @"PMNPlantIdentifierKey";
     NSSet *regions;
     
     regions = self.locationManager.monitoredRegions;
+    
+    if ( !regions.count ) {
+        [self addRegionForPlantName:nil plantUUID:nil major:nil minor:nil identifier:@"test"];
+    }
+    
     self.dryPlantIdentifiers = [NSMutableArray array];
     for ( CLRegion *region in regions ) {
         if ( [[self.currentPlantDictionaries valueForKeyPath:PMNPlantIdentifierKey] containsObject:region.identifier] ) {
@@ -162,8 +167,9 @@ static NSString *PMNPlantIdentifierKey = @"PMNPlantIdentifierKey";
 - (void)addRegionForPlantName:(NSString *)name plantUUID:(NSString *)UUIDString major:(NSString *)major minor:(NSString *)minor identifier:(NSString *)identifier
 {
     CLBeaconRegion *region;
+
+    region = [[CLBeaconRegion alloc] initWithProximityUUID:[[NSUUID alloc] initWithUUIDString:@"A4951111-C5B1-4B44-B512-1370F02D74DE"] major:123 minor:123 identifier:identifier];
     
-    region = [[CLBeaconRegion alloc] initWithProximityUUID:[[NSUUID alloc] initWithUUIDString:UUIDString] major:major.integerValue minor:minor.integerValue identifier:identifier];
     [self.locationManager startMonitoringForRegion:region];
 }
 
@@ -202,7 +208,8 @@ static NSString *PMNPlantIdentifierKey = @"PMNPlantIdentifierKey";
     }
     
     notification = [[UILocalNotification alloc] init];
-    notification.alertBody = [NSString stringWithFormat:@"%@ needs to be watered", plant[PMNPlantNameKey]];
+    notification.alertBody = @"Don't forget the limes for tonight";
+    
     [[UIApplication sharedApplication] presentLocalNotificationNow:notification];
 }
 
